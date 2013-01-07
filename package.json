@@ -1,0 +1,26 @@
+{
+  "name": "git-trail",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "git",
+    "history",
+    "parse"
+  ],
+  "author": "Hugh Kennedy <hughskennedy@gmail.com> (http://hughskennedy.com)",
+  "license": "MIT",
+  "description": "Provides a readable stream alternative to `git-log`, so you can access your git history through Node.",
+  "dependencies": {
+    "split": "~0.1.1",
+    "stream-combiner": "0.0.0",
+    "map-stream": "0.0.1"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/hughsk/git-trail.git"
+  }
+}

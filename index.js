@@ -4,8 +4,7 @@ var spawn = require('child_process').spawn
   , split = require('split')
   , path = require('path')
 
-
-var format = {
+var defaultFormat = {
   sha: '%H'
 , author: {
     name: '%an'
@@ -20,6 +19,16 @@ var format = {
 , body: '%B'
 }
 
+// get all format params - even nested ones
+function pluck (obj) {
+  var params = []
+  Object.keys(obj).forEach(function(key) {
+    var args = 'string' === typeof obj[key] ? [obj[key]] : pluck(obj[key])
+    params.push.apply(params, args)
+  })
+  return params
+};
+
 // Dirty hack, but it works a charm.
 module.exports = function(dir, options) {
   dir = path.resolve(dir || process.cwd)
@@ -28,21 +37,12 @@ module.exports = function(dir, options) {
     , options = options || {}
     , fieldDelimiter = '$@$@$@$@$'
     , lineDelimiter = '@$!$@$!$!'
+    , format = options.format || defaultFormat
 
   if (options.since) extras = extras.concat(['--since', options.since / 1000])
   if (options.until) extras = extras.concat(['--until', options.until / 1000])
-  if (options.format) format = options.format
 
   var params = pluck(format)
-  // get all format params - even nested ones
-  function pluck (obj) {
-    var params = []
-    Object.keys(obj).forEach(function(key) {
-      var args = ('string' === typeof obj[key]) ? [obj[key]] : pluck(obj[key])
-      params.push.apply(params, args)
-    })
-    return params
-  }
 
   var proc = spawn('git', ['log', '--format=' + params.join(fieldDelimiter) + lineDelimiter].concat(extras), { cwd: dir })
 
